@@ -1,6 +1,7 @@
 package rpg;
 
 import java.util.Map;
+import java.util.Scanner;
 
 public class Character {
     private String name;
@@ -11,14 +12,14 @@ public class Character {
     private int xp;
     private Inventory inventory;
 
-    public Character(String name, String characterClass, int hp, int attackPower, int level, int xp, Inventory inventory) {
+    public Character(String name, String characterClass, int hp, int attackPower, int level, int xp) {
         this.name = name;
         this.characterClass = characterClass;
         this.hp = hp;
         this.attackPower = attackPower;
         this.level = level;
         this.xp = xp;
-        this.inventory = inventory;
+        this.inventory = new Inventory();
     }
 
     public String getName() {
@@ -69,21 +70,21 @@ public class Character {
         }
         hp -= damage;
     }
-    public void attackEnemy(Character Defender) {
+    public void attackEnemy(Character defender) {
         if (this.hp == 0) {
             System.out.println("Dead characters cannot attack");
             return;
         }
 
-        if(Defender.equals(this)) {
+        if(defender.equals(this)) {
             System.out.println("Can't attack yourself");
             return;
         }
-        if(Defender.hp == 0) {
+        if(defender.hp == 0) {
             System.out.println("Already Dead");
             return;
         }
-        Defender.takeDamage(this.attackPower);
+        defender.takeDamage(this.attackPower);
     }
 
     public void gainXp(int xpBooster, int acquiredXP) {
@@ -94,5 +95,32 @@ public class Character {
             attackPower += (tempLevel-level)*5;
         }
         level = tempLevel;
+    }
+
+    public void addItem(String item) {
+        inventory.addItem(item);
+    }
+
+    private Scanner sc = new Scanner(System.in);
+    public void useItem(String item) {
+        Map<String, Integer> Items = getInventory();
+        if(Items.containsKey(item)) {
+            if(item.equals("Health Potion")) {
+                if(hp > 75) {
+                    System.out.println("Can't use healing potion, If have 75% hp");
+                    return;
+                }
+                hp += 25;
+            }
+            else if(item.equals("Attack Booster")) {
+                attackPower += (attackPower*5)/100;
+            }else if(item.equals("Rename Card")) {
+                System.out.print("Enter Name for character : ");
+                name = sc.nextLine();
+            }
+            inventory.removeItem(item);
+        }else{
+            System.out.println("Item Not Available");
+        }
     }
 }
