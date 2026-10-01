@@ -1,5 +1,8 @@
 package rpg;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class RPG_game {
     static void main(String[] args) {
 
@@ -17,5 +20,8 @@ public class RPG_game {
 
         blizzFrost.gainXp(20, 200);
         blizzFrost.displayCharacter();
+
+        Set<Character> newSet = new HashSet<>();
+        newSet.
     }
 }
